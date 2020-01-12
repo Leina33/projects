@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -34,10 +35,27 @@ class Projects(models.Model):
     description = models.TextField()
     project_url=models.URLField(max_length=250)
     
+    @classmethod
+    def search_by_title(cls,search_term):
+        news = cls.objects.filter(title__icontains=search_term)
+        return awardsapp
+    
     def __str__(self):
         return self.title
     
     
+class Image(models.Model):
+    image=models.ImageField(upload_to='picture/', )
+    name = models.CharField(max_length=40)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, related_name="images")
+    description=models.TextField()
+    location=models.ForeignKey(Location, null=True)
+    tags=models.ManyToManyField(tags, blank=True)
+    likes = models.IntegerField(default=0)
+    comments= models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
     
     
     
