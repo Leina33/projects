@@ -7,6 +7,9 @@ class Projects(models.Model):
     description = models.TextField()
     project_url=models.URLField(max_length=250)
     
+    def __str__(self):
+        return self.title
+    
     
     
     
