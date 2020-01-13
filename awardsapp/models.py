@@ -58,4 +58,11 @@ class Image(models.Model):
         return self.name
     
     
+class Profile(models.Model):
+    
+    profile_pic = models.ImageField(upload_to='picture/', null=True, blank=True, default= 0)
+    bio = models.TextField(max_length=200,null=True,blank=True,default="bio")
+    user=models.OneToOneField(User, on_delete=models.CASCADE, null=True, related_name="profile")
+    contact=models.IntegerField(default=0)
+    
     
