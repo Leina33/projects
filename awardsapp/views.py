@@ -2,11 +2,12 @@ from django.shortcuts import render
 from .models import Image,Location,tags, Profile,Projects,NewsLetterRecipients
 from django.http import HttpResponseRedirect
 from .email import send_welcome_email
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 # def welcome(request):
 #     return render(request, 'index.html')
-    
+@login_required(login_url='/accounts/login/')    
 def home_projects (request):
     
     if request.GET.get('search_term'):
