@@ -7,13 +7,13 @@ from django.contrib import admin
 from django.contrib import admin
 
 # Register your models here.
-from .models import Location,tags, Image, Project, Profile, Review
+from .models import Location,tags, Image, Projects, Profile, Review
 
 
 class ImageAdmin(admin.ModelAdmin):
     filter_horizontal = ('tags',)
 
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectsAdmin(admin.ModelAdmin):
     list_display = ('title',)
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -21,7 +21,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 class ReviewAdmin(admin.ModelAdmin):
     model = Review
-    list_display = ('project', 'usability_rating', 'content_rating', 'design_rating', 'user', 'comment', 'image',)
+    # list_display = ('project', 'usability_rating', 'content_rating', 'design_rating', 'user', 'comment', 'image',)
     list_filter = ['user',]
     search_fields = ['comment',]
 
@@ -29,5 +29,5 @@ admin.site.register(Location)
 admin.site.register(tags)
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Profile, ProfileAdmin)
-admin.site.register(Project, ProjectAdmin)
+admin.site.register(Projects, ProjectsAdmin)
 admin.site.register(Review, ReviewAdmin)

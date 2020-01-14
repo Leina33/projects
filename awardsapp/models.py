@@ -114,10 +114,10 @@ class NewsLetterRecipients(models.Model):
     
 class Review(models.Model):
     
-    project = models.ForeignKey(Project, null=True, blank=True, on_delete=models.CASCADE, related_name="reviews")
+    # project = models.ForeignKey(Project, null=True, blank=True, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name='reviews')
     image = models.ForeignKey(Image, on_delete=models.CASCADE, related_name="reviews", null=True, blank=True)
     comment = models.TextField()
-    design_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
-    usability_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
-    content_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
+    # design_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
+    # usability_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
+    # content_rating = models.IntegerField(choices=RATING_CHOICES, default=0)

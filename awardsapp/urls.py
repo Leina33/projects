@@ -7,6 +7,7 @@ urlpatterns=[
 
     url(r'^$', views.home_projects, name='homePage'),
     url(r'^search/', views.search_projects, name='search_projects'),
+    url(r'^ajax/newsletter/$', views.newsletter, name='newsletter')
 ]
 
 if settings.DEBUG:
