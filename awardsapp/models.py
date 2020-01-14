@@ -66,3 +66,8 @@ class Profile(models.Model):
     contact=models.IntegerField(default=0)
     
     
+class NewsLetterRecipients(models.Model):
+    name = models.CharField(max_length = 30)
+    email = models.EmailField()
+    
+    
