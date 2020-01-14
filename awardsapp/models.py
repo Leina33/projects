@@ -1,3 +1,5 @@
+import numpy as np
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -35,13 +37,52 @@ class Projects(models.Model):
     description = models.TextField()
     project_url=models.URLField(max_length=250)
     
+    def average_design(self):
+        design_ratings = list(map(lambda x: x.design_rating, self.reviews.all()))
+        return np.mean(design_ratings)
+
+    def average_usability(self):
+        usability_ratings = list(map(lambda x: x.usability_rating, self.reviews.all()))
+        return np.mean(usability_ratings)
+
+    def average_content(self):
+        content_ratings = list(map(lambda x: x.content_rating, self.reviews.all()))
+        return np.mean(content_ratings)
+
+    def save_project(self):
+        self.save()
+
     @classmethod
-    def search_by_title(cls,search_term):
-        news = cls.objects.filter(title__icontains=search_term)
-        return awardsapp
-    
+    def delete_project_by_id(cls, id):
+        projects = cls.objects.filter(pk=id)
+        projects.delete()
+
+    @classmethod
+    def get_project_by_id(cls, id):
+        projects = cls.objects.get(pk=id)
+        return projects
+
+    @classmethod
+    def search_projects(cls, search_term):
+        projects = cls.objects.filter(title__icontains=search_term)
+        return projects
+
+    @classmethod
+    def update_project(cls, id):
+        projects = cls.objects.filter(id=id).update(id=id)
+        return projects
+
+    @classmethod
+    def update_description(cls, id):
+        projects = cls.objects.filter(id=id).update(id=id)
+        return projects
+
     def __str__(self):
         return self.title
+
+
+
+    
     
     
 class Image(models.Model):
@@ -69,5 +110,8 @@ class Profile(models.Model):
 class NewsLetterRecipients(models.Model):
     name = models.CharField(max_length = 30)
     email = models.EmailField()
+    
+    
+class Review(models.Model):
     
     
