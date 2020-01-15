@@ -1,9 +1,13 @@
+from __future__ import unicode_literals
 import numpy as np
+from django.db.models.signals import post_save
+from django.db.models import Avg, Max, Min
 
 from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+import datetime as dt
 
 class tags(models.Model):
     name = models.CharField(max_length=30)
@@ -16,8 +20,8 @@ class tags(models.Model):
 
     def delete_tags(self):
         self.delete()
-        
-        
+
+
 class Location(models.Model):
     name = models.CharField(max_length=30)
 
@@ -30,13 +34,14 @@ class Location(models.Model):
 
     def __str__(self):
         return self.name
-        
-class Projects(models.Model):
+
+
+class Project(models.Model):
     title = models.TextField(max_length=200, null=True, blank=True, default="title")
     project_image = models.ImageField(upload_to='picture/', null=True, blank=True)
     description = models.TextField()
     project_url=models.URLField(max_length=250)
-    
+
     def average_design(self):
         design_ratings = list(map(lambda x: x.design_rating, self.reviews.all()))
         return np.mean(design_ratings)
@@ -82,9 +87,44 @@ class Projects(models.Model):
 
 
 
-    
-    
-    
+class Profile(models.Model):
+    class Meta:
+        db_table = 'profile'
+
+    bio = models.TextField(max_length=200, null=True, blank=True, default="bio")
+    profile_pic = models.ImageField(upload_to='picture/', null=True, blank=True, default= 0)
+    user=models.OneToOneField(User, on_delete=models.CASCADE, null=True, related_name="profile")
+    # project=models.ForeignKey(Project, null=True)
+    # contact=models.IntegerField(default=0)
+
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+    post_save.connect(create_user_profile, sender=User)
+
+
+    def save_profile(self):
+        self.save()
+
+    def delete_profile(self):
+        self.delete()
+
+
+    @classmethod
+    def search_users(cls, search_term):
+        profiles = cls.objects.filter(user__username__icontains=search_term)
+        return profiles
+
+    @property
+    def image_url(self):
+        if self.profile_pic and hasattr(self.profile_pic, 'url'):
+            return self.profile_pic.url
+
+    def __str__(self):
+        return self.user.username
+
+
 class Image(models.Model):
     image=models.ImageField(upload_to='picture/', )
     name = models.CharField(max_length=40)
@@ -97,31 +137,82 @@ class Image(models.Model):
 
     def __str__(self):
         return self.name
-    
-    
-class Profile(models.Model):
-    
-    profile_pic = models.ImageField(upload_to='picture/', null=True, blank=True, default= 0)
-    bio = models.TextField(max_length=200,null=True,blank=True,default="bio")
-    user=models.OneToOneField(User, on_delete=models.CASCADE, null=True, related_name="profile")
-    contact=models.IntegerField(default=0)
-    
-    
-class NewsLetterRecipients(models.Model):
-    name = models.CharField(max_length = 30)
-    email = models.EmailField()
-    
-    
+
+    def save_image(self):
+        self.save()
+
+    @classmethod
+    def delete_image_by_id(cls, id):
+        pictures = cls.objects.filter(pk=id)
+        pictures.delete()
+
+    @classmethod
+    def get_image_by_id(cls, id):
+        pictures = cls.objects.get(pk=id)
+        return pictures
+
+    @classmethod
+    def filter_by_tag(cls, tags):
+        pictures = cls.objects.filter(tags=tags)
+        return pictures
+
+    @classmethod
+    def filter_by_location(cls, location):
+        pictures = cls.objects.filter(location=location)
+        return pictures
+
+    @classmethod
+    def search_image(cls, search_term):
+        pictures = cls.objects.filter(name__icontains=search_term)
+        return pictures
+
+    @classmethod
+    def update_image(cls, id):
+        pictures=cls.objects.filter(id=id).update(id=id)
+        return pictures
+
+    @classmethod
+    def update_description(cls, id):
+        pictures = cls.objects.filter(id=id).update(id=id)
+        return pictures
+
+
 class Review(models.Model):
-    
-    # project = models.ForeignKey(Project, null=True, blank=True, on_delete=models.CASCADE, related_name="reviews")
+    RATING_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+        (6, '6'),
+        (7, '7'),
+        (8, '8'),
+        (9, '9'),
+        (10, '10'),
+
+    )
+    project = models.ForeignKey(Project, null=True, blank=True, on_delete=models.CASCADE, related_name="reviews")
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE, related_name='reviews')
     image = models.ForeignKey(Image, on_delete=models.CASCADE, related_name="reviews", null=True, blank=True)
     comment = models.TextField()
-    # design_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
-    # usability_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
-    # content_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
-    
+    design_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
+    usability_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
+    content_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
+
+    def save_comment(self):
+        self.save()
+
+    def get_comment(self, id):
+        comments = Review.objects.filter(image_id =id)
+        return comments
+
+    def __str__(self):
+        return self.comment
+
+class NewsLetterRecipients(models.Model):
+    name = models.CharField(max_length = 30)
+    email = models.EmailField()
+
 class Like(models.Model):
     user = models.ForeignKey(User)
     image = models.ForeignKey(Image)
