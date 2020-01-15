@@ -100,3 +100,8 @@ def newsletter(request):
     send_welcome_email(name, email)
     data= {'success': 'You have been successfully added to the newsletter mailing list'}
     return JsonResponse(data)
+
+
+
+#########################functions for project serializers####################
+
