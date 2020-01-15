@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from .models import Image,Location,tags, Profile,Projects,NewsLetterRecipients
+from .models import Image,Location,tags, Profile,Projects,NewsLetterRecipients,Like
 from django.http import HttpResponseRedirect
 from .email import send_welcome_email
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .forms import NewsLetterForm
+# from .forms import NewsLetterForm
 
 # Create your views here.
 # def welcome(request):
@@ -88,6 +88,9 @@ def project(request, id):
                                           'latest_review_list':latest_review_list})
 
 
+
+
+##################################Ajax functionalities############################################
 def newsletter(request):
     name = request.POST.get('your_name')
     email= request.POST.get('email')

@@ -121,3 +121,17 @@ class Review(models.Model):
     # design_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
     # usability_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
     # content_rating = models.IntegerField(choices=RATING_CHOICES, default=0)
+    
+class Like(models.Model):
+    user = models.ForeignKey(User)
+    image = models.ForeignKey(Image)
+    value = models.IntegerField(default=True, null=True, blank=True)
+
+    def save_like(self):
+        self.save()
+
+    def __str__(self):
+        return str(self.user) + ':' + str(self.image) + ':' + str(self.value)
+
+    class Meta:
+        unique_together = ("user", "image", "value")
