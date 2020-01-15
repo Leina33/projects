@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.contrib import admin
 
 # Register your models here.
-from .models import Location,tags, Image, Project, Profile, Review
+from .models import Location,tags, Image, Project, Review
 
 
 class ImageAdmin(admin.ModelAdmin):
@@ -27,6 +27,6 @@ class ReviewAdmin(admin.ModelAdmin):
 admin.site.register(Location)
 admin.site.register(tags)
 admin.site.register(Image, ImageAdmin)
-admin.site.register(Profile, ProfileAdmin)
+# admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Review, ReviewAdmin)
