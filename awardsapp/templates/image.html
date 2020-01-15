@@ -55,7 +55,9 @@
 <h3 style="font-family: 'Dosis', sans-serif;">Add your comment</h3>
   <hr>
   <form action=""  method="post" style="font-family: 'Dosis',sans-serif;">
-    {%csrf_token%} {% bootstrap_form form %}
+    {%csrf_token%} {% for field in form %}
+    {% bootstrap_field field %}
+{% endfor %}
       <input type="submit" class="btn btn-primary" value="Post">
   </form>
   <hr>
