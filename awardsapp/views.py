@@ -4,6 +4,11 @@ from django.http import HttpResponseRedirect
 from .email import send_welcome_email
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.views import APIView
+ffrom .serializers import ProjectSerializer, ProfileSerializer
+
+
 # from .forms import NewsLetterForm
 
 # Create your views here.
@@ -105,3 +110,8 @@ def newsletter(request):
 
 #########################functions for project serializers####################
 
+class ProjectList(APIView):
+    def get(self,request,format=None):
+    all_projects = Project.objects.all()
+    serializers = ProjectSerializer(all_projects, many = True)
+    return Response(serializers.data)   
