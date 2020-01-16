@@ -1,6 +1,37 @@
-body{
-    background-color: azure;
-}
-h1{
-    height: 24px;
-}
+a {
+    color: seashell;
+  }
+  
+  body {
+    background-color: white;
+  }
+  
+  #dominic {
+    font-family: 'Dosis', sans-serif;
+    font-size: 30px;
+  }
+  
+  li {
+    display: inline;
+  }
+  
+  li a {
+    padding: 20px;
+  }
+  
+  #footer1 li {
+    padding: 10px;
+    font-size: 10px;
+  }
+  
+  .itson {
+    background-color: white;
+    height:auto;
+  }
+  
+  #jumbo{
+  height:200px !important;
+  }
+  
+  .w-33 {
+      min-wid
